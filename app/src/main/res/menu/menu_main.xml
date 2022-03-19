@@ -1,0 +1,85 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.vlad.linguisto.MainActivity">
+    <item
+        android:id="@+id/submenu_word_lists"
+        android:orderInCategory="101"
+        android:title="@string/menu_word_lists">
+        <menu>
+            <item
+                android:id="@+id/action_learn_list"
+                android:orderInCategory="1"
+                android:title="@string/menu_learn" />
+            <item
+                android:id="@+id/action_recap_list"
+                android:orderInCategory="2"
+                android:title="@string/menu_recap" />
+            <item
+                android:id="@+id/action_rank_list"
+                android:orderInCategory="3"
+                android:title="@string/menu_rank_list" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_quiz"
+        android:orderInCategory="102"
+        android:title="@string/menu_quiz" />
+    <item
+        android:id="@+id/submenu_learned_words"
+        android:orderInCategory="103"
+        android:title="@string/menu_learned_words">
+        <menu>
+            <item
+                android:id="@+id/action_store_learned"
+                android:orderInCategory="1"
+                android:title="@string/menu_save_learned" />
+            <item
+                android:id="@+id/action_restore_learned"
+                android:orderInCategory="2"
+                android:title="@string/menu_restore_learned" />
+            <item
+                android:id="@+id/action_mark_learned"
+                android:orderInCategory="3"
+                android:title="@string/menu_mark_learned" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/submenu_choose_text_file"
+        android:orderInCategory="105"
+        android:title="@string/menu_files_to_read">
+        <menu>
+            <item
+                android:id="@+id/action_choose_text_file"
+                android:orderInCategory="1"
+                android:title="@string/menu_choose_file" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_learn_stats"
+        android:orderInCategory="106"
+        android:title="@string/menu_learn_stats" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="107"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="108"
+        android:title="@string/menu_help"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_check_update"
+        android:orderInCategory="109"
+        android:title="@string/menu_check_update" />
+    <item
+        android:id="@+id/action_update_db_from_file"
+        android:orderInCategory="109"
+        android:title="@string/menu_update_db_from_file" />
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="110"
+        android:title="@string/menu_about"
+        app:showAsAction="never" />
+</menu>

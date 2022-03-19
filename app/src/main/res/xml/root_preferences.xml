@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/title_quiz_settings">
+
+        <EditTextPreference
+            app:key="maxQuizScore"
+            app:defaultValue="6"
+            android:inputType="numberDecimal"
+            android:digits="0123456789"
+            android:maxLength="2"
+            app:title="@string/title_max_quiz_score"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/title_reader_settings">
+        <EditTextPreference
+            app:key="textZoom"
+            app:defaultValue="100"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:maxLength="3"
+            app:title="@string/title_text_zoom"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

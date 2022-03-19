@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.vlad.linguisto.QuizActivity">
+    <item
+        android:id="@+id/action_remove_quiz_item"
+        android:orderInCategory="100"
+        android:title="@string/menu_remove_item" />
+    <item
+        android:id="@+id/action_mark_known_remove_quiz_item"
+        android:orderInCategory="100"
+        android:title="@string/menu_mark_known_and_remove" />
+</menu>
