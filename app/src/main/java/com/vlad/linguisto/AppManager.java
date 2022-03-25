@@ -25,6 +25,8 @@ public class AppManager {
 
     public static String knownWordsFile = "knownWords.txt";
     private static final String sharedPropFile = "linguisto.app";
+    public static final String BASE_URL_ASSET = "file:///android_asset/";
+    public static List allWords = new ArrayList();
 
     private int maxQuizScore = 6;
     private final int maxRecentFiles = 5;

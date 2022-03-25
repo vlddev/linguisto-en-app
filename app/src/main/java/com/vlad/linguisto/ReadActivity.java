@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -67,6 +68,17 @@ public class ReadActivity extends AppCompatActivity {
         footerTextView = (TextView)findViewById(R.id.footerTextView);
         footerTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f);
 
+        tts = new TextToSpeech(this.getApplicationContext(),
+                new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if (status != -1) {
+                            tts.setLanguage(Locale.US);
+                            tts.setSpeechRate(0.8F);
+                        }
+                    }
+                }, "com.google.android.tts");
+
         prepareText();
     }
 
@@ -77,6 +89,15 @@ public class ReadActivity extends AppCompatActivity {
         if (appManager.getReadFile() != null) {
             appManager.setPageForFile(appManager.getReadFile(), curPage);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 
     private void prepareText() {
@@ -166,7 +187,7 @@ public class ReadActivity extends AppCompatActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.web_view_dialog, null);
         WebView webView = view.findViewById(R.id.dialogWebView);
         webView.setWebViewClient(new DictWebViewClient(mode, id));
-        webView.loadDataWithBaseURL(null, getDictContent(mode, id), "text/html", "utf-8", null);
+        webView.loadDataWithBaseURL("file:///android_asset/", getDictContent(mode, id), "text/html", "utf-8", null);
 
         alert.setView(view);
         alert.show();

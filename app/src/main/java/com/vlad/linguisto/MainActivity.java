@@ -42,6 +42,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -84,24 +85,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        ArrayAdapter var5 = new ArrayAdapter(this, 2131492900, 2131296577, AppManager.allWords);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, AppManager.allWords);
         searchText = (AutoCompleteTextView)findViewById(R.id.searchText);
         searchText.setThreshold(2);
-        this.searchText.setAdapter(var5);
-        this.searchText.setOnItemClickListener(new AdapterView.OnItemClickListener(this) {
-            final MainActivity this$0;
-
-            {
-                this.this$0 = var1;
-            }
-
+        this.searchText.setAdapter(arrayAdapter);
+        this.searchText.setOnItemClickListener(
+            new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView var1, View var2, int var3, long var4) {
-                this.this$0.textView.loadDataWithBaseURL("file:///android_asset/", this.this$0.getSearchAsHtml(var1.getAdapter().getItem(var3).toString()), "text/html", "utf-8", (String)null);
+                textView.loadDataWithBaseURL("file:///android_asset/",
+                        getSearchAsHtml(var1.getAdapter().getItem(var3).toString()), "text/html", "utf-8", (String)null);
             }
         });
 
         textView = (WebView)findViewById(R.id.textView);
         textView.setWebViewClient(new DictWebViewClient());
+        tts = new TextToSpeech(this.getApplicationContext(),
+            new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status != -1) {
+                        tts.setLanguage(Locale.US);
+                        tts.setSpeechRate(0.8F);
+                    }
+                }
+            }, "com.google.android.tts");
     }
 
     @Override
@@ -609,6 +617,9 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Word is already in quiz", Toast.LENGTH_LONG).show();
                     }
+                } else if (url.startsWith("dict://tts/")) {
+                    String word = url.replace("dict://tts/", "");
+                    tts.speak(word, 0, (HashMap)null);
                 } else {
                     view.loadDataWithBaseURL(null, getSearchAsHtml(url.replace("dict://", "")), "text/html", "utf-8", null);
                 }

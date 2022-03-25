@@ -63,7 +63,22 @@ public class SentencePOS {
                 elemList.add(curElem);
                 prevElem = curElem;
             } else { // divider
-                prevElem = new SentElem(wf+" ", "", SentElem.TYPE_DIVIDER);
+                String res = wf;
+                switch (wf) {
+                    case "-LRB-":
+                        res = " (";
+                        break;
+                    case "-LSB-":
+                        res = " [";
+                        break;
+                    case "-RRB-":
+                        res = " )";
+                        break;
+                    case "-RSB-":
+                        res = " ]";
+                        break;
+                }
+                prevElem = new SentElem(res+" ", "", SentElem.TYPE_DIVIDER);
                 elemList.add(prevElem);
             }
         }

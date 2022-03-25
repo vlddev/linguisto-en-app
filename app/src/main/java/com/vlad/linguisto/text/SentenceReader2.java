@@ -40,7 +40,7 @@ public class SentenceReader2 {
                 bEOS = true;
             }
         } while (!bEOS);
-        // read all subsiquent EOS or '"' or ' ' chars
+        // read all subsequent EOS or '"' or ' ' chars
         String sChar;
         while (true) {
             if (pos < sbText.length()) {

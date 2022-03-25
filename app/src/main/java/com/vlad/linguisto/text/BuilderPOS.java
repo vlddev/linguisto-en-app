@@ -21,10 +21,12 @@ public class BuilderPOS {
     private static final String LOG_TAG = BuilderPOS.class.getSimpleName();
 
     public static String TagSeparator = "¿";
-    private MaxentTagger posTagger = null;
+    private static MaxentTagger posTagger = null;
 
 	public BuilderPOS() throws Exception {
-        loadTagger();
+        if (posTagger == null) {
+            loadTagger();
+        }
 	}
 
 	private void loadTagger() {

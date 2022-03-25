@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.vlad.linguisto.AppManager;
 import com.vlad.linguisto.R;
 import com.vlad.linguisto.db.obj.Inf;
 import com.vlad.linguisto.db.obj.Translation;
 import com.vlad.linguisto.db.obj.WordType;
+import com.vlad.linguisto.tools.DictInfCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class DictDbHelper extends SQLiteOpenHelper {
     public static final int DB_VERSION = 1;
     private final Context context;
     ReaderDAO dbReader = new ReaderDAO();
+    private DictInfCache infCache = new DictInfCache();
     private final SQLiteDatabase db;
 
 
@@ -159,6 +162,7 @@ public class DictDbHelper extends SQLiteOpenHelper {
         for(WordType obj : wordTypes) {
             Inf.wordTypeMap.put(obj.getId(), obj.getDesc());
         }
+        AppManager.allWords = getAllWordList();
     }
 
     public String getDbVersion() {
@@ -263,26 +267,48 @@ public class DictDbHelper extends SQLiteOpenHelper {
         return ret;
     }
 
-    public List<Inf> getBaseForm(String wf, boolean ignoreCase) {
-        String sql = "SELECT distinct inf.id, inf.inf, inf.type, inf.transcription, inf.rank, COALESCE(k.inf_id, -1) known, COALESCE(k.learn_date, -1) learn_date " +
-                " FROM wf, inf" +
-                " LEFT JOIN known_inf k ON k.inf_id = inf.id" +
-                " where wf.wf = ? and wf.fk_inf = inf.id";
-        if (ignoreCase) {
-            sql = "SELECT distinct inf.id, inf.inf, inf.type, inf.transcription, inf.rank, COALESCE(k.inf_id, -1) known, COALESCE(k.learn_date, -1) learn_date " +
-                " FROM wf, inf" +
-                " LEFT JOIN known_inf k ON k.inf_id = inf.id" +
-                " where lower(wf.wf) = lower(?) and wf.fk_inf = inf.id";
-        }
-        List<Inf> ret = new ArrayList<>();
+    public List<String> getAllWordList() {
+        List<String> ret = new ArrayList<>();
         try {
-            Cursor cursor = db.rawQuery(sql, new String[] { wf });
+            Cursor cursor = db.rawQuery("SELECT distinct lower(inf) FROM inf ORDER BY 1", null);
             if(cursor.getCount() > 0) {
-                ret = getInfs(cursor);
+                while (cursor.moveToNext()) {
+                    ret.add(cursor.getString(0));
+                }
             }
             cursor.close();
         } catch (SQLiteException e) {
-            Log.e(LOG_TAG, "Error in getBaseForm: " + e.getMessage());
+            Log.e(LOG_TAG, "Error in getAllWordList: " + e.getMessage());
+        }
+
+        return ret;
+    }
+
+    public List<Inf> getBaseForm(String wf, boolean ignoreCase) {
+        List<Inf> ret = new ArrayList<>();
+        if (infCache.contains(wf)) {
+            ret = infCache.get(wf);
+        } else {
+            String sql = "SELECT distinct inf.id, inf.inf, inf.type, inf.transcription, inf.rank, COALESCE(k.inf_id, -1) known, COALESCE(k.learn_date, -1) learn_date " +
+                    " FROM wf, inf" +
+                    " LEFT JOIN known_inf k ON k.inf_id = inf.id" +
+                    " where wf.wf = ? and wf.fk_inf = inf.id";
+            if (ignoreCase) {
+                sql = "SELECT distinct inf.id, inf.inf, inf.type, inf.transcription, inf.rank, COALESCE(k.inf_id, -1) known, COALESCE(k.learn_date, -1) learn_date " +
+                        " FROM wf, inf" +
+                        " LEFT JOIN known_inf k ON k.inf_id = inf.id" +
+                        " where lower(wf.wf) = lower(?) and wf.fk_inf = inf.id";
+            }
+            try {
+                Cursor cursor = db.rawQuery(sql, new String[] { wf });
+                if(cursor.getCount() > 0) {
+                    ret = getInfs(cursor);
+                    infCache.put(wf, ret);
+                }
+                cursor.close();
+            } catch (SQLiteException e) {
+                Log.e(LOG_TAG, "Error in getBaseForm: " + e.getMessage());
+            }
         }
         return ret;
     }

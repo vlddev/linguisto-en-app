@@ -204,6 +204,7 @@ public class Inf extends BaseObj {
     public String getHeadHtml() {
         StringBuilder sb = new StringBuilder();
         sb.append("<p style=\"font-size:120%;\"><b>").append(getInf()).append("</b>");
+        sb.append("<a href=\"dict://tts/" + getInf() + "\"><img src=\"icon/speak-24.png\"/></a>");
         if (getTranscription() != null) {
             sb.append("<span style=\"color: silver;\"> ").append(getTranscription()).append("</span>");
         }
